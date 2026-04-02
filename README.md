@@ -1,4 +1,4 @@
-# [Your Project Name Here]
+# [Movie Favorites & Reviews]
 
 **CS178: Cloud and Database Systems — Project #1**
 **Author:** [Munkh-Orgil Tumurchudur]
@@ -8,7 +8,7 @@
 
 ## Overview
 
-<!-- Describe your project in 2-4 sentences. What does it do? Who is it for? What problem does it solve? -->
+A movie browsing and review website. Users can explore top-rated movies, browse movies by genre, and write personal reviews.
 
 ---
 
