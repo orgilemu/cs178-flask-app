@@ -1,5 +1,5 @@
-# author: T. Urness and M. Moore
-# description: Flask example using redirect, url_for, and flash
+# author: Munkhorgil Tumurchudur
+# description: Movie Favorites & Reviews (CS178 ProjectOne)
 # credit: the template html files were constructed with the help of ChatGPT
 
 from flask import Flask
@@ -13,7 +13,13 @@ app.secret_key = 'your_secret_key' # this is an artifact for using flash display
 
 @app.route('/')
 def home():
-    return render_template('home.html')
+    try:
+        top_movies = get_top_movies()
+        return render_template('home.html', movies=top_movies)
+    except Exception as e:
+        return f"An error occurred: {str(e)}"
+
+
 
 @app.route('/add-user', methods=['GET', 'POST'])
 def add_user():

@@ -1,5 +1,5 @@
 # dbCode.py
-# Author: Your Name
+# Author: Munkhorgil Tumurchudur
 # Helper functions for database connection and queries
 
 import pymysql
@@ -22,3 +22,8 @@ def execute_query(query, args=()):
     rows = cur.fetchall()
     cur.close()
     return rows
+
+def get_top_movies():
+    """Returns the top 10 movies by rating."""
+    query = "SELECT * FROM movie ORDER BY vote_average DESC LIMIT 10"
+    return execute_query(query)
