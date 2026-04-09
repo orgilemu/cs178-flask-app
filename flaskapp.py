@@ -1,5 +1,5 @@
 # author: Munkhorgil Tumurchudur
-# description: Movie Favorites & Reviews (CS178 ProjectOne)
+# description: Top Movies & Reviews (CS178 ProjectOne)
 # credit: the template html files were constructed with the help of ChatGPT
 
 from flask import Flask
