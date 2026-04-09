@@ -21,48 +21,63 @@ def home():
 
 
 
-@app.route('/add-user', methods=['GET', 'POST'])
-def add_user():
+@app.route('/genres', methods=['GET'])
+def genres():
+    try:
+        genre_id = request.args.get('genre_id')
+        genres = get_genres()
+        movies = []
+        if genre_id:
+            movies = get_movies_by_genre(genre_id)
+        return render_template('genres.html', genres=genres, movies=movies, selected_genre=genre_id)
+    except Exception as e:
+        return f"Error: {e}"
+
+
+
+# Movie Review in the DynamoDB
+
+
+@app.route('/add-review', methods=['GET', 'POST'])
+def add_review():
     if request.method == 'POST':
-        # Extract form data
-        name = request.form['name']
-        genre = request.form['genre']
-        
-        # Process the data (e.g., add it to a database)
-        # For now, let's just print it to the console
-        print("Name:", name, ":", "Favorite Genre:", genre)
-        
-        flash('User added successfully! Huzzah!', 'success')  # 'success' is a category; makes a green banner at the top
-        # Redirect to home page or another page upon successful submission
-        return redirect(url_for('home'))
+        movie_title = request.form['movie_title']
+        username = request.form['username']
+        rating = request.form['rating']
+        review_text = request.form['review_text']
+        create_review(movie_title, username, rating, review_text)
+        flash('Review added successfully!', 'success')
+        return redirect(url_for('reviews'))
     else:
-        # Render the form page if the request method is GET
-        return render_template('add_user.html')
+        movies = get_all_movies()
+        return render_template('add_review.html', movies=movies)
 
-@app.route('/delete-user',methods=['GET', 'POST'])
-def delete_user():
+
+@app.route('/reviews')
+def reviews():
+    all_reviews = print_all_reviews()
+    return render_template('reviews.html', reviews=all_reviews)
+
+
+@app.route('/edit-review/<review_id>', methods=['GET', 'POST'])
+def edit_review(review_id):
     if request.method == 'POST':
-        # Extract form data
-        name = request.form['name']
-        
-        # Process the data (e.g., add it to a database)
-        # For now, let's just print it to the console
-        print("Name to delete:", name)
-        
-        flash('User deleted successfully! Hoorah!', 'warning') 
-        # Redirect to home page or another page upon successful submission
-        return redirect(url_for('home'))
+        rating = request.form['rating']
+        review_text = request.form['review_text']
+        update_review(review_id, rating, review_text)
+        flash('Review updated!', 'success')
+        return redirect(url_for('reviews'))
     else:
-        # Render the form page if the request method is GET
-        return render_template('delete_user.html')
+        review = get_review(review_id)
+        return render_template('edit_review.html', review=review)
 
 
-@app.route('/display-users')
-def display_users():
-    # hard code a value to the users_list;
-    # note that this could have been a result from an SQL query :) 
-    users_list = (('John','Doe','Comedy'),('Jane', 'Doe','Drama'))
-    return render_template('display_users.html', users = users_list)
+@app.route('/delete-review/<review_id>')
+def remove_review(review_id):
+    delete_review(review_id)
+    flash('Review deleted!', 'warning')
+    return redirect(url_for('reviews'))
+
 
 
 # these two lines of code should always be the last in the file

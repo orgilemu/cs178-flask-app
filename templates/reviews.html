@@ -1,0 +1,56 @@
+ <!-- created with help of chatgpt. -->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>All Reviews</title>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+    {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+            {% for category, message in messages %}
+                <div class="alert alert-{{ category }}">
+                    {{ message }}
+                </div>
+            {% endfor %}
+        {% endif %}
+    {% endwith %}
+    <div class="container">
+        <h1 class="mt-5">All Movie Reviews</h1>
+        <a href="/add-review" class="btn btn-primary mt-3">Add a Review</a>
+
+        {% if reviews %}
+        <table class="table table-striped mt-4">
+            <thead>
+                <tr>
+                    <th>Movie</th>
+                    <th>User</th>
+                    <th>Rating</th>
+                    <th>Review</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for review in reviews %}
+                <tr>
+                    <td>{{ review['movie_title'] }}</td>
+                    <td>{{ review['username'] }}</td>
+                    <td>{{ review['rating'] }}</td>
+                    <td>{{ review['review_text'] }}</td>
+                    <td>
+                        <a href="/edit-review/{{ review['review_id'] }}" class="btn btn-sm btn-secondary">Edit</a>
+                        <a href="/delete-review/{{ review['review_id'] }}" class="btn btn-sm btn-danger">Delete</a>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        {% else %}
+        <p class="mt-4">No reviews yet. Be the first to add one!</p>
+        {% endif %}
+
+        <a href="/" class="btn btn-secondary mt-3">Back to Home</a>
+    </div>
+</body>
+</html>
