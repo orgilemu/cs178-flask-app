@@ -8,7 +8,7 @@
 
 ## Overview
 
-A movie browsing and review website. Users can explore top-rated movies, browse movies by genre, and write personal reviews.
+A movie browsing and review website. Users can explore top rated movies by genre, and write personal reviews.
 
 ---
 
@@ -30,8 +30,11 @@ ProjectOne/
 ├── dbCode.py            # Database helper functions (MySQL connection + queries)
 ├── creds_sample.py      # Sample credentials file (see Credential Setup below)
 ├── templates/
-│   ├── home.html        # Landing page
-│   ├── [other].html     # Add descriptions for your other templates
+│   ├── home.html        # Landing page with all time top 10 movies
+│   ├── add_review.html  # form to add new review
+│   ├── edit_review.html # form to edit old review
+│   ├── genres.html      # browse movies by genre
+│   ├── reviews.html     # view all reviews with edit and delete options
 ├── .gitignore           # Excludes creds.py and other sensitive files
 └── README.md
 ```
@@ -43,8 +46,8 @@ ProjectOne/
 1. Clone the repository:
 
    ```bash
-   git clone https://github.com/your-username/your-repo-name.git
-   cd your-repo-name
+   git clone https://github.com/orgilemu/cs178-flask-app.git
+   cd cs178-flask-app
    ```
 
 2. Install dependencies:
@@ -70,7 +73,7 @@ ProjectOne/
 The app is deployed on an AWS EC2 instance. To view the live version:
 
 ```
-http://[your-ec2-public-ip]:8080
+http://ec2-3-227-243-227.compute-1.amazonaws.com:8080
 ```
 
 _(Note: the EC2 instance may not be running after project submission.)_
@@ -97,12 +100,13 @@ db = "your-database-name"
 
 ### SQL (MySQL on RDS)
 
-<!-- Briefly describe your relational database schema. What tables do you have? What are the key relationships? -->
+<!-- this project uses "movies" database from https://analytics.drake.edu/~urness/CS178/movies.sql. i mainly used tables from "movie", "genre" and "movie_genres" and used JOIN query to connect all three tables to find the top movies-->
 
 **Example:**
 
-- `[TableName]` — stores [description]; primary key is `[key]`
-- `[TableName]` — stores [description]; foreign key links to `[other table]`
+- `[movie]` — stores all movie data informations; primary key is `[movie_id]`
+- `[genre]` — stores all genre names; primary key links to `[genre_id]`
+- `[movie_genre]` — stores movie_id and genre_id; foreign key links to `[movie_id, genre_id]`
 
 The JOIN query used in this project: <!-- describe it in plain English -->
 
@@ -110,9 +114,9 @@ The JOIN query used in this project: <!-- describe it in plain English -->
 
 <!-- Describe your DynamoDB table. What is the partition key? What attributes does each item have? How does it connect to the rest of the app? -->
 
-- **Table name:** `[your-table-name]`
-- **Partition key:** `[key-name]`
-- **Used for:** [description]
+- **Table name:** `[MovieReviews]`
+- **Partition key:** `[review_id]`
+- **Used for:** [stores users movie reviews. each review is identified by combination of the username and movie title.]
 
 ---
 
@@ -120,19 +124,19 @@ The JOIN query used in this project: <!-- describe it in plain English -->
 
 | Operation | Route      | Description    |
 | --------- | ---------- | -------------- |
-| Create    | `/[route]` | [what it does] |
-| Read      | `/[route]` | [what it does] |
-| Update    | `/[route]` | [what it does] |
-| Delete    | `/[route]` | [what it does] |
+| Create    | `/[create_review]` | [sumbits a new movie review] |
+| Read      | `/[print_all_reviews]` | [displays all reviews from dynamoDB] |
+| Update    | `/[update_review]` | [edits the rating ad text of their review] |
+| Delete    | `/[delete_review]` | [removes a review from dynamoDB] |
 
 ---
 
 ## Challenges and Insights
 
-<!-- What was the hardest part? What did you learn? Any interesting design decisions? -->
+The hardest part was writing the html file, because I have no background of html, but with the help of chatgpt I learned a lot about html, another challenging part was setting up new VPC and RDS, needed to go back multiple times through old lab lessons.
 
 ---
 
 ## AI Assistance
 
-<!-- List any AI tools you used (e.g., ChatGPT) and briefly describe what you used them for. Per course policy, AI use is allowed but must be cited in code comments and noted here. -->
+I used Chatgpt to help with writing html and debugging my flaskapp.
